@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Button } from './ui/button';
+import React, { useRef } from 'react';
 import { Card, CardContent } from './ui/card';
 
 const sections = [
@@ -101,59 +100,52 @@ const sections = [
 ];
 
 export default function FashionAiExperience() {
-  const visibleSections = sections.filter(section => section.include === true);
-  const [index, setIndex] = useState(0);
+  const visibleSections = sections.filter(section => section.include);
+  const sectionRefs = useRef<(HTMLElement | null)[]>([]);
+
+  const scrollToSection = (index: number) => {
+    sectionRefs.current[index]?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <div className="min-h-screen bg-black text-white px-4 py-8 sm:px-8 flex flex-col items-center">
-      <nav className="w-full flex flex-wrap justify-center gap-4 mb-6">
+    <div id='presentation' className="flex h-screen overflow-hidden">
+      <aside className="w-56 border-r border-white/20 bg-black p-4 flex-shrink-0">
+        <h2 className="text-lg font-bold mb-4">Sections</h2>
+        <nav className="space-y-2">
+          {visibleSections.map((section, i) => (
+            <button
+              key={section.title}
+              onClick={() => scrollToSection(i)}
+              className={`block w-full text-left px-3 py-2 rounded transition text-sm md:text-base bg-neutral-800 text-gray-300 hover:bg-neutral-700`}
+            >
+              {section.title.split(' ')[0]}
+            </button>
+          ))}
+        </nav>
+      </aside>
+
+      <section className="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth bg-black text-white flex-1 px-6 py-8">
         {visibleSections.map((section, i) => (
-          <button
+          <div
+            ref={(el) => { sectionRefs.current[i] = el; }}
             key={section.title}
-            onClick={() => setIndex(i)}
-            className={`px-3 py-1 rounded text-sm md:text-base transition ${
-              index === i
-                ? 'bg-blue-600 text-white'
-                : 'bg-neutral-800 text-gray-300 hover:bg-neutral-700'
-            }`}
+            className="w-full max-w-4xl mx-auto text-center animate-fade-in snap-start flex flex-col justify-center h-screen"
           >
-            {section.title.split(' ')[0]}
-          </button>
+            <h1 className="text-3xl md:text-4xl font-bold mb-6">
+              {section.title}
+            </h1>
+            <Card className="bg-neutral-900 border border-neutral-700">
+              <CardContent className="p-6 space-y-3">
+                {section.content.map((line, i) => (
+                  <p key={i} className="text-base md:text-lg text-neutral-300">
+                    {line}
+                  </p>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
         ))}
-      </nav>
-
-      <div className="w-full max-w-4xl text-center animate-fade-in">
-        <h1 className="text-3xl md:text-4xl font-bold mb-6">
-          {visibleSections[index].title}
-        </h1>
-        <Card className="bg-neutral-900 border border-neutral-700">
-          <CardContent className="p-6 space-y-3">
-            {visibleSections[index].content.map((line, i) => (
-              <p key={i} className="text-base md:text-lg text-neutral-300">
-                {line}
-              </p>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="flex gap-4 mt-8">
-        <Button
-          variant="secondary"
-          onClick={() => setIndex((i) => Math.max(i - 1, 0))}
-          disabled={index === 0}
-        >
-          Back
-        </Button>
-        <Button
-          onClick={() =>
-            setIndex((i) => Math.min(i + 1, visibleSections.length - 1))
-          }
-          disabled={index === visibleSections.length - 1}
-        >
-          Next
-        </Button>
-      </div>
+      </section>
     </div>
   );
 }

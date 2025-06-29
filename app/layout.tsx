@@ -14,8 +14,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <header className="sticky top-0 z-50 bg-black bg-opacity-80 backdrop-blur border-b border-neutral-800 px-6 py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold">GDL AI Conversational Ecommerce</h1>
           <nav className="space-x-4">
-            <a href="#" className="hover:text-blue-500 transition">Home</a>
-            <a href="#" className="hover:text-blue-500 transition">About</a>
             <a href="#" className="hover:text-blue-500 transition">Contact</a>
           </nav>
         </header>
@@ -27,17 +25,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <p className="text-lg md:text-2xl text-neutral-400 max-w-2xl mb-8">
             Move beyond traditional websites. Delight your customers with AI-powered shopping experiences.
           </p>
+          
           <a
-            href="#"
-            className="text-lg px-6 py-3 bg-blue-600 hover:bg-blue-700 transition rounded"
-          >
-            Try the Experience
-          </a>
+  href="#presentation"
+  className="text-lg px-6 py-3 bg-white text-black rounded opacity-0 animate-fade-in-up animation-delay-1000"
+>
+  Explore the Demo Presentation
+</a>
         </section>
 
-        <main className="min-h-screen overflow-x-hidden">
+        <section className="min-h-screen overflow-x-hidden">
           {children}
-        </main>
+        </section>
 
         <footer className="border-t border-neutral-800 px-6 py-4 text-sm text-center text-neutral-500">
           &copy; {new Date().getFullYear()} GDL AI Conversational Ecommerce
