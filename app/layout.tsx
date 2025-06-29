@@ -28,7 +28,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           
           <a
   href="#presentation"
-  className="text-lg px-6 py-3 bg-white text-black rounded opacity-0 animate-fade-in-up delay-1000"
+  className="text-lg px-6 py-3 bg-white text-black rounded animate-fade-in-up delay-1000"
 >
   Explore the Demo Presentation
 </a>
