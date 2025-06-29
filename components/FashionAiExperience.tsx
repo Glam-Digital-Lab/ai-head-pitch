@@ -101,61 +101,59 @@ const sections = [
 ];
 
 export default function FashionAiExperience() {
+  const visibleSections = sections.filter(section => section.include === true);
   const [index, setIndex] = useState(0);
 
   return (
-    <>
-      <div className="min-h-screen bg-black text-white px-4 py-8 sm:px-8 flex flex-col items-center">
-        <nav className="w-full flex flex-wrap justify-center gap-4 mb-6">
-          {sections.filter(section => section.include).map((section, i) => (
-            <button
-              key={section.title}
-              onClick={() => setIndex(i)}
-              className={`px-3 py-1 rounded text-sm md:text-base transition ${
-                index === i
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-neutral-800 text-gray-300 hover:bg-neutral-700'
-              }`}
-            >
-              {section.title.split(' ')[0]}
-            </button>
-          ))}
-        </nav>
-        <div
-          key={index}
-          className="w-full max-w-4xl text-center animate-fade-in"
-        >
-          <h1 className="text-3xl md:text-4xl font-bold mb-6">
-            {sections[index].title}
-          </h1>
-          <Card className="bg-neutral-900 border border-neutral-700">
-            <CardContent className="p-6 space-y-3">
-              {sections[index].content.map((line, i) => (
-                <p key={i} className="text-base md:text-lg text-neutral-300">
-                  {line}
-                </p>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
-        <div className="flex gap-4 mt-8">
-          <Button
-            variant="secondary"
-            onClick={() => setIndex((i) => Math.max(i - 1, 0))}
-            disabled={index === 0}
+    <div className="min-h-screen bg-black text-white px-4 py-8 sm:px-8 flex flex-col items-center">
+      <nav className="w-full flex flex-wrap justify-center gap-4 mb-6">
+        {visibleSections.map((section, i) => (
+          <button
+            key={section.title}
+            onClick={() => setIndex(i)}
+            className={`px-3 py-1 rounded text-sm md:text-base transition ${
+              index === i
+                ? 'bg-blue-600 text-white'
+                : 'bg-neutral-800 text-gray-300 hover:bg-neutral-700'
+            }`}
           >
-            Back
-          </Button>
-          <Button
-            onClick={() =>
-              setIndex((i) => Math.min(i + 1, sections.length - 1))
-            }
-            disabled={index === sections.length - 1}
-          >
-            Next
-          </Button>
-        </div>
+            {section.title.split(' ')[0]}
+          </button>
+        ))}
+      </nav>
+
+      <div className="w-full max-w-4xl text-center animate-fade-in">
+        <h1 className="text-3xl md:text-4xl font-bold mb-6">
+          {visibleSections[index].title}
+        </h1>
+        <Card className="bg-neutral-900 border border-neutral-700">
+          <CardContent className="p-6 space-y-3">
+            {visibleSections[index].content.map((line, i) => (
+              <p key={i} className="text-base md:text-lg text-neutral-300">
+                {line}
+              </p>
+            ))}
+          </CardContent>
+        </Card>
       </div>
-    </>
+
+      <div className="flex gap-4 mt-8">
+        <Button
+          variant="secondary"
+          onClick={() => setIndex((i) => Math.max(i - 1, 0))}
+          disabled={index === 0}
+        >
+          Back
+        </Button>
+        <Button
+          onClick={() =>
+            setIndex((i) => Math.min(i + 1, visibleSections.length - 1))
+          }
+          disabled={index === visibleSections.length - 1}
+        >
+          Next
+        </Button>
+      </div>
+    </div>
   );
 }
