@@ -16,6 +16,12 @@ const config: Config = {
     },
   },
   plugins: [],
+  safelist: [
+    'delay-500',
+    'delay-700',
+    'delay-1000',
+    'animate-fade-in-up'
+  ],
 };
 
 export default config;
