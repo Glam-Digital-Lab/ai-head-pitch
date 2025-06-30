@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef } from 'react';
 import { Card, CardContent } from './ui/card';
 
@@ -77,16 +79,6 @@ const sections = [
     ]
   },
   {
-    include: false,
-    title: 'Roadmap',
-    content: [
-      'Week 1: MVP frontend + AI + Shopify API integration',
-      'Week 2: Dynamic RAG + outfit suggestion logic',
-      'Week 3: User login + AI-driven cart',
-      'Week 4: UX polish, testing, launch'
-    ]
-  },
-  {
     include: true,
     title: 'Expected KPIs & Sources',
     content: [
@@ -108,15 +100,15 @@ export default function FashionAiExperience() {
   };
 
   return (
-    <div id='presentation' className="flex h-screen overflow-hidden">
-      <aside className="w-56 border-r border-white/20 bg-black p-4 flex-shrink-0">
+    <div id="presentation" className="flex flex-col md:flex-row h-screen overflow-hidden">
+      <aside className="hidden md:block w-56 border-r border-neutral-200 dark:border-white/20 bg-white dark:bg-black p-4 flex-shrink-0">
         <h2 className="text-lg font-bold mb-4">Sections</h2>
         <nav className="space-y-2">
           {visibleSections.map((section, i) => (
             <button
               key={section.title}
               onClick={() => scrollToSection(i)}
-              className={`block w-full text-left px-3 py-2 rounded transition text-sm md:text-base bg-neutral-800 text-gray-300 hover:bg-neutral-700`}
+              className="block w-full text-left px-3 py-2 rounded transition text-sm md:text-base bg-neutral-100 dark:bg-neutral-800 text-gray-800 dark:text-gray-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
             >
               {section.title.split(' ')[0]}
             </button>
@@ -124,28 +116,41 @@ export default function FashionAiExperience() {
         </nav>
       </aside>
 
-      <section className="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth bg-black text-white flex-1 px-6 py-8">
+      <section className="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth bg-white text-black dark:bg-black dark:text-white flex-1 px-4 md:px-6 py-8">
         {visibleSections.map((section, i) => (
           <div
             ref={(el) => { sectionRefs.current[i] = el; }}
             key={section.title}
             className="w-full max-w-4xl mx-auto text-center animate-fade-in snap-start flex flex-col justify-center h-screen"
           >
-            <h1 className="text-3xl md:text-4xl font-bold mb-6">
+            <h1 className="text-2xl md:text-4xl font-bold mb-6">
               {section.title}
             </h1>
-            <Card className="bg-neutral-900 border border-neutral-700">
+            <Card className="bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700">
               <CardContent className="p-6 space-y-3">
                 {section.content.map((line, i) => (
-                  <p key={i} className="text-base md:text-lg text-neutral-300">
+                  <p key={i} className="text-base md:text-lg text-neutral-800 dark:text-neutral-300">
                     {line}
                   </p>
                 ))}
+
+                <div className="mt-6 flex justify-center animate-bounce">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 text-neutral-500 dark:text-neutral-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
               </CardContent>
             </Card>
           </div>
         ))}
-      </section>
+      </section>      
     </div>
   );
 }
