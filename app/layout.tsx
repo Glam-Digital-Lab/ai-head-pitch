@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             The Future of Ecommerce is Conversational
           </h1>
           <p className="text-lg md:text-2xl text-neutral-600 dark:text-neutral-400 max-w-2xl mb-8">
-            Move beyond traditional websites. Delight your customers with AI-powered shopping experiences.
+            <span><b>Move beyond traditional websites</b></span> <br></br>Delight your customers with AI-powered shopping experiences.
           </p>
           <a
             href="#presentation"

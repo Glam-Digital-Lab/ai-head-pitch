@@ -1,42 +1,62 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { SunIcon, MoonIcon, MonitorIcon as DesktopComputerIcon  } from 'lucide-react';
+
+const themes = ['light', 'system', 'dark'] as const;
+type Theme = typeof themes[number];
 
 export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [theme, setTheme] = useState<Theme>('system');
 
   useEffect(() => {
-    // Evita flickering
     setMounted(true);
-
-    const stored = localStorage.getItem('theme');
-    if (stored === 'light' || stored === 'dark') {
+    const stored = (localStorage.getItem('theme') as Theme) || 'system';
+    if (themes.includes(stored)) {
       setTheme(stored);
-      document.documentElement.classList.toggle('dark', stored === 'dark');
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const systemTheme = prefersDark ? 'dark' : 'light';
-      setTheme(systemTheme);
-      document.documentElement.classList.toggle('dark', prefersDark);
     }
+    applyTheme(stored);
   }, []);
 
-  const toggle = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-    localStorage.setItem('theme', newTheme);
-  };
+  function applyTheme(value: Theme) {
+    const root = document.documentElement;
+    root.classList.remove('light', 'dark');
+    if (value === 'system') {
+      const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      root.classList.toggle('dark', dark);
+    } else {
+      root.classList.toggle('dark', value === 'dark');
+    }
+  }
+
+  function handleClick(nextIndex: number) {
+    const next = themes[nextIndex % themes.length];
+    setTheme(next);
+    localStorage.setItem('theme', next);
+    applyTheme(next);
+  }
 
   if (!mounted) return null;
 
   return (
-    <button
-      onClick={toggle}
-      className="text-sm px-3 py-1 border border-neutral-600 rounded hover:bg-neutral-800 transition"
-    >
-      {theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
-    </button>
+    <div className="flex items-center space-x-2 border border-neutral-300 dark:border-neutral-600 rounded-full p-1 bg-white dark:bg-black">
+      {themes.map((t, i) => {
+        const Icon = t === 'light' ? SunIcon : t === 'dark' ? MoonIcon : DesktopComputerIcon;
+        const isActive = theme === t;
+        return (
+          <button
+            key={t}
+            aria-label={t}
+            onClick={() => handleClick(i)}
+            className={`p-2 rounded-full transition-colors ${
+              isActive ? 'bg-neutral-200 dark:bg-neutral-800' : 'hover:bg-neutral-100 dark:hover:bg-neutral-700'
+            }`}
+          >
+            <Icon className={`h-5 w-5 ${isActive ? 'text-black dark:text-white' : 'text-neutral-500 dark:text-neutral-400'}`} />
+          </button>
+        );
+      })}
+    </div>
   );
 }
